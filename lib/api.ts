@@ -7,14 +7,26 @@ export const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+// api.interceptors.request.use((config) => {
+//   if (typeof window !== 'undefined') {
+//     const token = localStorage.getItem('accessToken');
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+//   }
+//   return config;
+// });
+
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('accessToken');
+    const token = window.localStorage.getItem('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
   }
   return config;
+}, (error) => {
+  return Promise.reject(error);
 });
 
 api.interceptors.response.use(
